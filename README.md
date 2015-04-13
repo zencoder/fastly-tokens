@@ -12,14 +12,14 @@ import (
   "fmt"
   "log"
 
-  "github.com/zencoder/fastly-tokens"
+  "github.com/zencoder/fastly-tokens/ft"
 )
 
 func main() {
 	// Generate token that is valid for 60 seconds using the default secret
 	var token string
 	var err error
-	if token, err = GenerateToken("RmFzdGx5IFRva2VuIFRlc3Q=", 60); err != nil {
+	if token, err = ft.GenerateToken("RmFzdGx5IFRva2VuIFRlc3Q=", 60); err != nil {
 		log.Fatal("Error while generating token", err)
 	}
 	fmt.Printf("Token: %s\n", token)
@@ -29,6 +29,6 @@ func main() {
 ## Benchmarks
 ```shell
 PASS
-BenchmarkGenerateToken	  200000	      8687 ns/op
-ok  	github.com/zencoder/fastly-tokens	2.359s
+BenchmarkGenerateToken    200000        6523 ns/op
+ok    github.com/zencoder/fastly-tokens/ft  1.551s
 ```

@@ -1,4 +1,4 @@
-package main
+package ft
 
 import (
 	"io/ioutil"
