@@ -12,7 +12,7 @@ import (
   "fmt"
   "log"
 
-  "github.com/zencoder/fast-tokens"
+  "github.com/zencoder/fastly-tokens"
 )
 
 func main() {
