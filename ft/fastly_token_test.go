@@ -1,6 +1,7 @@
 package ft
 
 import (
+	"encoding/base64"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -16,7 +17,7 @@ func TestGenerateToken(t *testing.T) {
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 
-	token, err := GenerateToken("RmFzdGx5IFRva2VuIFRlc3Q=", 60)
+	token, err := GenerateToken("RmFzdGx5IFRva2VuIFRlc3Q=", 60, base64.StdEncoding)
 	if err != nil {
 		t.Error("Error while generating token", err)
 	}
@@ -28,6 +29,6 @@ func TestGenerateToken(t *testing.T) {
 
 func BenchmarkGenerateToken(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		GenerateToken("RmFzdGx5IFRva2VuIFRlc3Q=", 60)
+		GenerateToken("RmFzdGx5IFRva2VuIFRlc3Q=", 60, base64.StdEncoding)
 	}
 }

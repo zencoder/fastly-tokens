@@ -9,6 +9,7 @@ Install the ```fastly-tokens``` library:
 package main
 
 import (
+  "encoding/base64"
   "fmt"
   "log"
 
@@ -19,7 +20,7 @@ func main() {
 	// Generate token that is valid for 60 seconds using the default secret
 	var token string
 	var err error
-	if token, err = ft.GenerateToken("RmFzdGx5IFRva2VuIFRlc3Q=", 60); err != nil {
+	if token, err = ft.GenerateToken("RmFzdGx5IFRva2VuIFRlc3Q=", 60, base64.StdEncoding); err != nil {
 		log.Fatal("Error while generating token", err)
 	}
 	fmt.Printf("Token: %s\n", token)
