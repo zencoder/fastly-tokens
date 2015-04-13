@@ -10,14 +10,14 @@ import (
 	"time"
 )
 
-func GenerateToken(secret string, expiration_seconds int) (token string, err error) {
+func GenerateToken(secret string, seconds_valid int) (token string, err error) {
 	var secret_bytes []byte
 	if secret_bytes, err = base64.StdEncoding.DecodeString(secret); err != nil {
 		return "", err
 	}
 
 	buf := new(bytes.Buffer)
-	binary.Write(buf, binary.LittleEndian, uint64(time.Now().Unix()/int64(expiration_seconds)))
+	binary.Write(buf, binary.LittleEndian, uint64(time.Now().Unix()/int64(seconds_valid)))
 	mac := hmac.New(sha256.New, secret_bytes)
 	mac.Write(buf.Bytes())
 	token = strings.TrimSpace(base64.StdEncoding.EncodeToString(mac.Sum(nil)))
