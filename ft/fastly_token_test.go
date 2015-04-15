@@ -27,6 +27,26 @@ func TestGenerateToken(t *testing.T) {
 	}
 }
 
+func TestGenerateTokenForURL(t *testing.T) {
+	var resp *http.Response
+	var err error
+	if resp, err = http.Get("http://token.fastly.com/token"); err != nil {
+		t.Error("Error reported when retrieving token from Fastly service", err)
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+
+	token, err := GenerateTokenForURL("http://www.example.com/index.html", "RmFzdGx5IFRva2VuIFRlc3Q=", 60, base64.StdEncoding)
+	if err != nil {
+		t.Error("Error while generating token", err)
+	}
+
+	if token == string(body) {
+		t.Error("Expected token mismatch between Fastly service token and URL-specific token", err)
+	}
+}
+
 func BenchmarkGenerateToken(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		GenerateToken("RmFzdGx5IFRva2VuIFRlc3Q=", 60, base64.StdEncoding)
