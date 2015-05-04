@@ -13,14 +13,14 @@ import (
 	"time"
 )
 
-func GenerateToken(secret string, secondsValid int, encoding *base64.Encoding) (token string, err error) {
+func GenerateToken(secret string, timeValid time.Duration, encoding *base64.Encoding) (token string, err error) {
 	secretBytes := []byte(secret)
 
 	var secretBuf bytes.Buffer
 	secretBuf.Write(secretBytes)
 
 	buf := new(bytes.Buffer)
-	binary.Write(buf, binary.LittleEndian, uint64(time.Now().Unix()/int64(secondsValid)))
+	binary.Write(buf, binary.LittleEndian, uint64(time.Now().Unix()/int64(timeValid.Seconds())))
 	mac := hmac.New(sha256.New, secretBuf.Bytes())
 	mac.Write(buf.Bytes())
 	token = strings.TrimSpace(encoding.EncodeToString(mac.Sum(nil)))
@@ -50,14 +50,14 @@ if( !req.http.Fastly-FF && !((req.http.X-Expected-Sig == req.http.X-Token-Signat
 }
 
 */
-func GenerateTokenForURL(filename string, secret string, expiration int, encoding *base64.Encoding) (token string, err error) {
-	data := fmt.Sprintf("%s%x", filename, expiration)
+func GenerateTokenForURL(filename string, secret string, expiration time.Time, encoding *base64.Encoding) (token string, err error) {
+	data := fmt.Sprintf("%s%x", filename, expiration.Unix())
 
 	mac := hmac.New(sha256.New, []byte(secret))
 	mac.Write([]byte(data))
 	digest := mac.Sum(nil)
 
 	hexDigest := hex.EncodeToString(digest)
-	token = url.QueryEscape(strings.TrimSpace(encoding.EncodeToString([]byte(fmt.Sprintf("%x_%s", expiration, hexDigest)))))
+	token = url.QueryEscape(strings.TrimSpace(encoding.EncodeToString([]byte(fmt.Sprintf("%x_%s", expiration.Unix(), hexDigest)))))
 	return
 }
