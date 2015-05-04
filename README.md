@@ -3,7 +3,7 @@ Generate tokens for securing content distributed with the Fastly CDN
 
 ## Usage
 Install the ```fastly-tokens``` library:
-```go get github.com/zencoder/fastly-tokens```
+```go get github.com/zencoder/fastly-tokens/ft```
 
 ```go
 package main
