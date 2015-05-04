@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
+	"time"
 )
 
 func TestGenerateToken(t *testing.T) {
@@ -17,7 +18,7 @@ func TestGenerateToken(t *testing.T) {
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 
-	token, err := GenerateToken("Fastly Token Test", 60, base64.StdEncoding)
+	token, err := GenerateToken("Fastly Token Test", 60*time.Second, base64.StdEncoding)
 	if err != nil {
 		t.Error("Error while generating token", err)
 	}
@@ -37,7 +38,7 @@ func TestGenerateTokenForURL(t *testing.T) {
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 
-	token, err := GenerateTokenForURL("http://www.example.com/index.html", "0bgZZu4uzL1K2My1842DjuAvkJnE8j9s", 60, base64.StdEncoding)
+	token, err := GenerateTokenForURL("http://www.example.com/index.html", "0bgZZu4uzL1K2My1842DjuAvkJnE8j9s", time.Now(), base64.StdEncoding)
 	if err != nil {
 		t.Error("Error while generating token", err)
 	}
@@ -49,6 +50,6 @@ func TestGenerateTokenForURL(t *testing.T) {
 
 func BenchmarkGenerateToken(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		GenerateToken("Fastly Token Test", 60, base64.StdEncoding)
+		GenerateToken("Fastly Token Test", 60*time.Second, base64.StdEncoding)
 	}
 }
