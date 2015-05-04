@@ -50,6 +50,6 @@ func TestGenerateTokenForURL(t *testing.T) {
 
 func BenchmarkGenerateToken(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		GenerateToken("Fastly Token Test", 60, base64.StdEncoding)
+		GenerateToken("Fastly Token Test", 60*time.Second, base64.StdEncoding)
 	}
 }
