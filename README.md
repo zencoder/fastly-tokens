@@ -1,5 +1,6 @@
 # fastly-tokens
-Generate tokens for securing content distributed with the Fastly CDN
+
+Generate tokens for securing content distributed with the Fastly CDN, in go!
 
 ## Usage
 Install the ```fastly-tokens``` library:
@@ -34,3 +35,21 @@ PASS
 BenchmarkGenerateToken    200000        6523 ns/op
 ok    github.com/zencoder/fastly-tokens/ft  1.551s
 ```
+
+## Development
+
+### Dependencies
+
+Tested on go 1.5.1.
+
+### Build and run unit tests
+
+    make test
+    
+### CI
+
+[This library builds on Circle CI, here.](https://circleci.com/gh/zencoder/fabric-playback-api/)
+
+## License
+
+[Apache License Version 2.0](LICENSE)
