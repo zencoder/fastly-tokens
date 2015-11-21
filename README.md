@@ -48,7 +48,7 @@ Tested on go 1.5.1.
     
 ### CI
 
-[This library builds on Circle CI, here.](https://circleci.com/gh/zencoder/fabric-playback-api/)
+[This library builds on Circle CI, here.](https://circleci.com/gh/zencoder/fastly-tokens/)
 
 ## License
 
