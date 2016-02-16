@@ -26,7 +26,6 @@ dependencies:
     - type cover     || go get golang.org/x/tools/cmd/cover
     - type goveralls || go get github.com/mattn/goveralls
     - type gover     || go get github.com/modocache/gover
-    - cd "$SRC_DIR"  && glide install
   post:
     - mv ~/.go_workspace /tmp || echo
     - mv ~/.gradle /tmp       || echo
