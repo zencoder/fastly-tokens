@@ -40,7 +40,7 @@ ok    github.com/zencoder/fastly-tokens/ft  1.551s
 
 ### Dependencies
 
-Tested on go 1.5.1.
+Tested on go 1.5.3.
 
 ### Build and run unit tests
 
