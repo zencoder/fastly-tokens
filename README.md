@@ -27,9 +27,9 @@ func main() {
 
 ## Benchmarks
 ```shell
-BenchmarkGenerateToken-8   	 1000000	      1770 ns/op
+BenchmarkGenerateToken-8   	 1000000	      1771 ns/op	     848 B/op	      12 allocs/op
 PASS
-ok  	github.com/zencoder/fastly-tokens/ft	2.004s
+ok  	github.com/zencoder/fastly-tokens/ft	2.101s
 ```
 
 ## Development
