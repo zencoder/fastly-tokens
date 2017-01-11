@@ -46,7 +46,7 @@ if( !req.http.Fastly-FF && !((req.http.X-Expected-Sig == req.http.X-Token-Signat
 }
 
 */
-func GenerateTokenForURL(filename string, secret string, expiration time.Time, encoding *base64.Encoding) string {
+func GenerateTokenForURL(filename, secret string, expiration time.Time, encoding *base64.Encoding) string {
 	data := fmt.Sprintf("%s%x", filename, expiration.Unix())
 
 	mac := hmac.New(sha256.New, []byte(secret))

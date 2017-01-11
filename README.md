@@ -27,16 +27,16 @@ func main() {
 
 ## Benchmarks
 ```shell
-BenchmarkGenerateToken-8   	 1000000	      1728 ns/op
+BenchmarkGenerateToken-8   	 1000000	      1770 ns/op
 PASS
-ok  	github.com/zencoder/fastly-tokens/ft	1.954s
+ok  	github.com/zencoder/fastly-tokens/ft	2.004s
 ```
 
 ## Development
 
 ### Dependencies
 
-Tested on go 1.7.1.
+Tested on go 1.7.4.
 
 ### Build and run unit tests
 
