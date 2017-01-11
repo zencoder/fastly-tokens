@@ -8,24 +8,20 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
-	"net/url"
 	"strings"
 	"time"
 )
 
-func GenerateToken(secret string, timeValid time.Duration, encoding *base64.Encoding) (token string, err error) {
-	secretBytes := []byte(secret)
-
+func GenerateToken(secret string, timeValid time.Duration, encoding *base64.Encoding) string {
 	var secretBuf bytes.Buffer
-	secretBuf.Write(secretBytes)
+	secretBuf.Write([]byte(secret))
 
 	buf := new(bytes.Buffer)
 	binary.Write(buf, binary.LittleEndian, uint64(time.Now().Unix()/int64(timeValid.Seconds())))
 	mac := hmac.New(sha256.New, secretBuf.Bytes())
 	mac.Write(buf.Bytes())
-	token = strings.TrimSpace(encoding.EncodeToString(mac.Sum(nil)))
 
-	return
+	return strings.TrimSpace(encoding.EncodeToString(mac.Sum(nil)))
 }
 
 /* VCL for verifying URL specific tokens
@@ -50,14 +46,12 @@ if( !req.http.Fastly-FF && !((req.http.X-Expected-Sig == req.http.X-Token-Signat
 }
 
 */
-func GenerateTokenForURL(filename string, secret string, expiration time.Time, encoding *base64.Encoding) (token string, err error) {
+func GenerateTokenForURL(filename string, secret string, expiration time.Time, encoding *base64.Encoding) string {
 	data := fmt.Sprintf("%s%x", filename, expiration.Unix())
 
 	mac := hmac.New(sha256.New, []byte(secret))
 	mac.Write([]byte(data))
-	digest := mac.Sum(nil)
+	token := fmt.Sprintf("%x_%s", expiration.Unix(), hex.EncodeToString(mac.Sum(nil)))
 
-	hexDigest := hex.EncodeToString(digest)
-	token = url.QueryEscape(strings.TrimSpace(encoding.EncodeToString([]byte(fmt.Sprintf("%x_%s", expiration.Unix(), hexDigest)))))
-	return
+	return strings.TrimSpace(encoding.EncodeToString([]byte(token)))
 }

@@ -20,32 +20,28 @@ import (
 
 func main() {
 	// Generate token that is valid for 60 seconds using the default secret
-	var token string
-	var err error
-	if token, err = ft.GenerateToken("RmFzdGx5IFRva2VuIFRlc3Q=", 60*time.Second, base64.StdEncoding); err != nil {
-		log.Fatal("Error while generating token", err)
-	}
+	token := ft.GenerateToken("RmFzdGx5IFRva2VuIFRlc3Q=", 60*time.Second, base64.StdEncoding); err != nil {
 	fmt.Printf("Token: %s\n", token)
 }
 ```
 
 ## Benchmarks
 ```shell
+BenchmarkGenerateToken-8   	 1000000	      1728 ns/op
 PASS
-BenchmarkGenerateToken    200000        6523 ns/op
-ok    github.com/zencoder/fastly-tokens/ft  1.551s
+ok  	github.com/zencoder/fastly-tokens/ft	1.954s
 ```
 
 ## Development
 
 ### Dependencies
 
-Tested on go 1.5.3.
+Tested on go 1.7.1.
 
 ### Build and run unit tests
 
     make test
-    
+
 ### CI
 
 [This library builds on Circle CI, here.](https://circleci.com/gh/zencoder/fastly-tokens/)
