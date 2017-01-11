@@ -20,7 +20,7 @@ import (
 
 func main() {
 	// Generate token that is valid for 60 seconds using the default secret
-	token := ft.GenerateToken("RmFzdGx5IFRva2VuIFRlc3Q=", 60*time.Second, base64.StdEncoding); err != nil {
+	token := ft.GenerateToken("RmFzdGx5IFRva2VuIFRlc3Q=", 60*time.Second, base64.StdEncoding)
 	fmt.Printf("Token: %s\n", token)
 }
 ```
