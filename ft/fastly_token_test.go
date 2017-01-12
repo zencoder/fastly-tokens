@@ -18,10 +18,7 @@ func TestGenerateToken(t *testing.T) {
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 
-	token, err := GenerateToken("Fastly Token Test", 60*time.Second, base64.StdEncoding)
-	if err != nil {
-		t.Error("Error while generating token", err)
-	}
+	token := GenerateToken("Fastly Token Test", 60*time.Second, base64.StdEncoding)
 
 	if token != string(body) {
 		t.Errorf("Expected token: %s, Actual Token: %s", body, token)
@@ -38,10 +35,7 @@ func TestGenerateTokenForURL(t *testing.T) {
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 
-	token, err := GenerateTokenForURL("http://www.example.com/index.html", "0bgZZu4uzL1K2My1842DjuAvkJnE8j9s", time.Now(), base64.StdEncoding)
-	if err != nil {
-		t.Error("Error while generating token", err)
-	}
+	token := GenerateTokenForURL("http://www.example.com/index.html", "0bgZZu4uzL1K2My1842DjuAvkJnE8j9s", time.Now(), base64.StdEncoding)
 
 	if token == string(body) {
 		t.Error("Expected token mismatch between Fastly service token and URL-specific token", err)
