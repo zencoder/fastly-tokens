@@ -19,5 +19,3 @@ coveralls:
 clean:
 	$(GO) clean
 	rm -rf coverage/
-godep-save:
-	godep save ./...
