@@ -57,14 +57,14 @@ func GenerateTokenForURL(url, secret string, expiration time.Time, encoding *bas
 }
 
 /*
-Includes an additional field in the Token, which is the URL that was signed.
+Includes an additional field in the Token, which is a regex that was signed.
 
-This allows us to do wildcard signing with the following VCL:
+This allows us to do wildcard signing by checking the request matches the regex with the following VCL:
 
 TODO
 */
-func GenerateTokenForWildcardURL(url, secret string, expiration time.Time, encoding *base64.Encoding) string {
-	data := fmt.Sprintf("%s%x", url, expiration.Unix())
+func GenerateTokenForURLRegex(urlRegex, secret string, expiration time.Time, encoding *base64.Encoding) string {
+	data := fmt.Sprintf("%s%x", urlRegex, expiration.Unix())
 
 	mac := hmac.New(sha256.New, []byte(secret))
 	mac.Write([]byte(data))
@@ -72,7 +72,7 @@ func GenerateTokenForWildcardURL(url, secret string, expiration time.Time, encod
 		"%x_%s_%s",
 		expiration.Unix(),
 		hex.EncodeToString(mac.Sum(nil)),
-		hex.EncodeToString([]byte(url)),
+		hex.EncodeToString([]byte(urlRegex)),
 	)
 
 	return strings.TrimSpace(encoding.EncodeToString([]byte(token)))

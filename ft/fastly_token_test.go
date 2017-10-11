@@ -3,8 +3,10 @@ package ft
 import (
 	"encoding/base64"
 	"encoding/hex"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 	"strings"
 	"testing"
 	"time"
@@ -44,11 +46,11 @@ func TestGenerateTokenForURL(t *testing.T) {
 	}
 }
 
-func TestGenerateTokenForWildcardURL(t *testing.T) {
-	var urlToSign = "*://www.example.com/*"
+func TestGenerateTokenForURLRegex(t *testing.T) {
+	var urlToSign = fmt.Sprintf(".*%s.*", regexp.QuoteMeta(`example.com/asd`))
 	var expiryTime = time.Unix(1507727103, 0)
 
-	token := GenerateTokenForWildcardURL(
+	token := GenerateTokenForURLRegex(
 		urlToSign,
 		"WZmGbDWYGVG2/FyXLYO2dnaRIh4g2pH61k/YdJsk3Bo=",
 		expiryTime,
@@ -70,9 +72,9 @@ func TestGenerateTokenForWildcardURL(t *testing.T) {
 		t.Errorf("Expiry timestamp was wrong, expected 1507727211 in Hex (%s) but got %s", expectedTimestamp, tokenParts[0])
 	}
 
-	var expectedSignature = "409867a8411de63a8659b2ed396910668b158215924374de2658b20bb52b6917"
+	var expectedSignature = "e707bee6c96006a954a66ed0d4693c62e27de3bf1637794a476cfe0583bae6a8"
 	if tokenParts[1] != expectedSignature {
-		t.Errorf("SHA-256 of secret+expiry was wrong. Expected %s, but got %s", expectedSignature, tokenParts[1])
+		t.Errorf("SHA-256 of urlRegex+expiry was wrong. Expected %s, but got %s", expectedSignature, tokenParts[1])
 	}
 
 	b, err := hex.DecodeString(tokenParts[2])
