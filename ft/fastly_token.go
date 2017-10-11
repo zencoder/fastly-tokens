@@ -46,12 +46,34 @@ if( !req.http.Fastly-FF && !((req.http.X-Expected-Sig == req.http.X-Token-Signat
 }
 
 */
-func GenerateTokenForURL(filename, secret string, expiration time.Time, encoding *base64.Encoding) string {
-	data := fmt.Sprintf("%s%x", filename, expiration.Unix())
+func GenerateTokenForURL(url, secret string, expiration time.Time, encoding *base64.Encoding) string {
+	data := fmt.Sprintf("%s%x", url, expiration.Unix())
 
 	mac := hmac.New(sha256.New, []byte(secret))
 	mac.Write([]byte(data))
 	token := fmt.Sprintf("%x_%s", expiration.Unix(), hex.EncodeToString(mac.Sum(nil)))
+
+	return strings.TrimSpace(encoding.EncodeToString([]byte(token)))
+}
+
+/*
+Includes an additional field in the Token, which is the URL that was signed.
+
+This allows us to do wildcard signing with the following VCL:
+
+TODO
+*/
+func GenerateTokenForWildcardURL(url, secret string, expiration time.Time, encoding *base64.Encoding) string {
+	data := fmt.Sprintf("%s%x", url, expiration.Unix())
+
+	mac := hmac.New(sha256.New, []byte(secret))
+	mac.Write([]byte(data))
+	token := fmt.Sprintf(
+		"%x_%s_%s",
+		expiration.Unix(),
+		hex.EncodeToString(mac.Sum(nil)),
+		hex.EncodeToString([]byte(url)),
+	)
 
 	return strings.TrimSpace(encoding.EncodeToString([]byte(token)))
 }
