@@ -11,15 +11,6 @@ jobs:
     workdir: "/go/src/github.com/zencoder/fastly-tokens"
     steps:
       - checkout
-      - restore_cache:
-          key: glide-{{ checksum "glide.lock" }}
-      - run:
-          name: Download vendored Go dependencies
-          command: glide install
-      - save_cache:
-          key: glide-{{ checksum "glide.lock" }}
-          paths:
-            - vendor
       - run:
           name: Install required tooling
           command: |
