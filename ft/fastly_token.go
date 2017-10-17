@@ -57,11 +57,9 @@ func GenerateTokenForURL(url, secret string, expiration time.Time, encoding *bas
 }
 
 /*
-Includes an additional field in the Token, which is a regex that was signed.
+Includes an additional field in the Token, which is a URL regex (e.g ^http:\/\/example\.com/abc/123/.*) that was signed.
 
-This allows us to do wildcard signing by checking the request matches the regex with the following VCL:
-
-TODO
+This allows wildcard signing in Fastly by checking the request URL matches the regex (in addition to the standard signature and expiry checks).
 */
 func GenerateTokenForURLRegex(urlRegex, secret string, expiration time.Time, encoding *base64.Encoding) string {
 	data := fmt.Sprintf("%s%x", urlRegex, expiration.Unix())
