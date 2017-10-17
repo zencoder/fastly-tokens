@@ -46,12 +46,32 @@ if( !req.http.Fastly-FF && !((req.http.X-Expected-Sig == req.http.X-Token-Signat
 }
 
 */
-func GenerateTokenForURL(filename, secret string, expiration time.Time, encoding *base64.Encoding) string {
-	data := fmt.Sprintf("%s%x", filename, expiration.Unix())
+func GenerateTokenForURL(url, secret string, expiration time.Time, encoding *base64.Encoding) string {
+	data := fmt.Sprintf("%s%x", url, expiration.Unix())
 
 	mac := hmac.New(sha256.New, []byte(secret))
 	mac.Write([]byte(data))
 	token := fmt.Sprintf("%x_%s", expiration.Unix(), hex.EncodeToString(mac.Sum(nil)))
+
+	return strings.TrimSpace(encoding.EncodeToString([]byte(token)))
+}
+
+/*
+Includes an additional field in the Token, which is a URL regex (e.g ^http:\/\/example\.com/abc/123/.*) that was signed.
+
+This allows wildcard signing in Fastly by checking the request URL matches the regex (in addition to the standard signature and expiry checks).
+*/
+func GenerateTokenForURLRegex(urlRegex, secret string, expiration time.Time, encoding *base64.Encoding) string {
+	data := fmt.Sprintf("%s%x", urlRegex, expiration.Unix())
+
+	mac := hmac.New(sha256.New, []byte(secret))
+	mac.Write([]byte(data))
+	token := fmt.Sprintf(
+		"%x_%s_%s",
+		expiration.Unix(),
+		hex.EncodeToString(mac.Sum(nil)),
+		hex.EncodeToString([]byte(urlRegex)),
+	)
 
 	return strings.TrimSpace(encoding.EncodeToString([]byte(token)))
 }
