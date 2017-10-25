@@ -2,7 +2,6 @@ package ft
 
 import (
 	"encoding/base64"
-	"encoding/hex"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -77,12 +76,8 @@ func TestGenerateTokenForURLRegex(t *testing.T) {
 		t.Errorf("SHA-256 of urlRegex+expiry was wrong. Expected %s, but got %s", expectedSignature, tokenParts[1])
 	}
 
-	b, err := hex.DecodeString(tokenParts[2])
-	if err != nil {
-		t.Errorf("Unexpected error while converting signed URL from Hex: %s", err.Error())
-	}
-	if string(b) != urlToSign {
-		t.Errorf("Expected token to include signed URL of %q, but got %q", urlToSign, string(b))
+	if tokenParts[2] != urlToSign {
+		t.Errorf("Expected token to include signed URL of %q, but got %q", urlToSign, tokenParts[2])
 	}
 }
 

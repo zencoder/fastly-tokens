@@ -70,7 +70,7 @@ func GenerateTokenForURLRegex(urlRegex, secret string, expiration time.Time, enc
 		"%x_%s_%s",
 		expiration.Unix(),
 		hex.EncodeToString(mac.Sum(nil)),
-		hex.EncodeToString([]byte(urlRegex)),
+		[]byte(urlRegex),
 	)
 
 	return strings.TrimSpace(encoding.EncodeToString([]byte(token)))
