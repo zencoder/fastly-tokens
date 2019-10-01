@@ -36,11 +36,11 @@ ok  	github.com/zencoder/fastly-tokens/ft	2.101s
 
 ### Dependencies
 
-Tested on go 1.9.1.
+Tested on go 1.13
 
 ### Build and run unit tests
 
-    make test
+    make
 
 ### CI
 
